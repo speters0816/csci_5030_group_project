@@ -1,1 +1,6 @@
-# csci_5030_group_project
+# Money Hunters
+## Development team that brings product solutions to the market. 
+
+**Our customer**: Companies or individuals looking to enhance their profit margins using software solutions that increase productivity, enhance marketing strategies, or improve information organization.
+
+**Our core prinicpal**: The development and design team should work together to satisfy the customers requirement that increases profit for the company. 
