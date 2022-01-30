@@ -5,4 +5,4 @@
 
 **Our core prinicpal**: The development and design team should work together to satisfy the customers requirement that increases profit for the company. 
 
-Current product solution: Discord-esque web application: [link](https://github.com/thegoldenmule/csci-5030/blob/main/notes/briefs/discord.md)
+**Current product solution**: Discord-esque web application: [link](https://github.com/thegoldenmule/csci-5030/blob/main/notes/briefs/discord.md)
