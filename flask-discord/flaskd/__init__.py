@@ -27,8 +27,6 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    return app
-
     # a simple page that prints the view number
     # index page
     @app.route('/')
@@ -36,7 +34,7 @@ def create_app(test_config=None):
         sql_db = db.get_db()
 
         # Check whether views table has any rows. If empty, intialze new siteViews column to 1
-        check = sql_db.execute("SELECT view FROM siteViews WHERE rowid=1"
+        check = sql_db.execute("SELECT views FROM siteViews WHERE rowid=1"
                 ).fetchone()
         if check == None:
             sql_db.execute("INSERT INTO siteViews (views) VALUES (1)")
