@@ -22,11 +22,33 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    
+    # Register db connection with app
+    from . import db
+    db.init_app(app)
+
+    return app
 
     # a simple page that prints the view number
     # index page
     @app.route('/')
     def simple_view():
-        return 'This page needs to print the views!'
+        sql_db = db.get_db()
+
+        # Check whether views table has any rows. If empty, intialze new siteViews column to 1
+        check = sql_db.execute("SELECT view FROM siteViews WHERE rowid=1"
+                ).fetchone()
+        if check == None:
+            sql_db.execute("INSERT INTO siteViews (views) VALUES (1)")
+        else:
+            sql_db.execute("UPDATE siteViews SET views = views +1 WHERE rowid=1") # Only update 1 row in db
+
+
+        sql_db.commit()
+
+        num_views = sql_db.execute("SELECT views FROM siteViews WHERE rowid = 1"
+                ).fetchone()[0] #Fetchone returns tuple. 1st element contains row value
+
+        return 'This page has been viewed {} times!'.format(num_views)
 
     return app
