@@ -32,7 +32,7 @@ def create_app(test_config=None):
 
     # a simple page that prints the view number
     # index page
-    @app.route('/')
+    @app.route('/count')
     def simple_view():
         sql_db = db.get_db()
 
