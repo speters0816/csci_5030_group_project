@@ -37,6 +37,12 @@ def create_app(test_config=None):
     def register():
         return render_template('register.html')
     
+    #Logout redirects to login page
+    @app.route('/logout')
+    def logout():
+        session.clear()
+        return redirect(url_for('index'))
+    
     # a simple page that prints the view number
     # index page
     @app.route('/count')
