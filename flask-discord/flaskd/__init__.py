@@ -29,7 +29,7 @@ def create_app(test_config=None):
     
     
     @app.route("/")
-    def index():
+    def login():
         return render_template('login_1.html')
     
     # register page need to establish and connect db
@@ -41,7 +41,7 @@ def create_app(test_config=None):
     @app.route('/logout')
     def logout():
         session.clear()
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
     
     # a simple page that prints the view number
     # index page
