@@ -50,6 +50,5 @@ def create_app(test_config=None):
         num_views = sql_db.execute("SELECT views FROM siteViews WHERE rowid = 1"
                 ).fetchone()[0] #Fetchone returns tuple. 1st element contains row value
 
-        return 'This page has been viewed {} times!'.format(num_views)
-
+        return render_template('index_count.html',content=num_views)
     return app
