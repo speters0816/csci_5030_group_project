@@ -26,10 +26,17 @@ def create_app(test_config=None):
     # Register db connection with app
     from . import db
     db.init_app(app)
+    
+    
     @app.route("/")
     def index():
         return render_template('login_1.html')
-
+    
+    # register page need to establish and connect db
+    @app.route('/register', methods=["POST", "GET"])
+    def register():
+        return render_template('register.html')
+    
     # a simple page that prints the view number
     # index page
     @app.route('/count')
