@@ -26,10 +26,13 @@ def create_app(test_config=None):
     # Register db connection with app
     from . import db
     db.init_app(app)
-        
+
+    from . import auth
+    
     @app.route("/")
     def index():
-        sql_db = db.get_db()
+        auth.load_logged_in_user()
+        return render_template('index.html')
 
     @app.route("/login")
     def login():
