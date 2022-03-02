@@ -34,8 +34,9 @@ def create_app(test_config=None):
     @app.route("/")
     @auth.login_required
     def index():
-        #print(g.user)
-        return render_template('index.html')
+        username = g.user["username"] # Grabs username from database fetch stored in g upon user request of the page
+                                      # Stored in auth.py
+        return render_template('index.html',username=username)
 
     @app.route("/login")
     def login():
