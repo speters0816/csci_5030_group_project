@@ -38,11 +38,6 @@ def create_app(test_config=None):
                                       # Stored in auth.py
         return render_template('index.html',username=username)
 
-    # register page need to establish and connect db
-    @app.route('/register', methods=["POST", "GET"])
-    def register():
-        return render_template('register.html')
-    
     #Logout redirects to login page
     @app.route('/logout')
     def logout():
