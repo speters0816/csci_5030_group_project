@@ -64,7 +64,7 @@ def register():
 
         flash(error)
 
-    return render_template("auth/register.html")
+    return render_template("register.html")
 
 @bp.before_app_request
 def load_logged_in_user():
