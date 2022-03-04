@@ -36,9 +36,40 @@ def login():
 
     return render_template("login_1.html")
 
+@bp.route("/register", methods=("GET", "POST"))
+def register():
+    """ Registers user from regiseter.html form submission"""
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        db = get_db()
+        error = None
+
+        if email == None:
+            error("Email is Required!")
+        elif password == None:
+            error("Password is Required!")
+
+        if error == None:
+            try:
+                db.execute("INSERT INTO user (email,password) VALUES (?, ?)", (email, generate_password_hash(password)))
+
+                db.commit()
+            
+            except db.IntegrityError:
+                error = "Email {} is already registered.".format(email)
+
+            else:
+                return redirect(url_for("auth.login"))
+
+        flash(error)
+
+    return render_template("auth/register.html")
 
 @bp.before_app_request
 def load_logged_in_user():
+    """ Load logged in user information by identifying if session contains the user id. 
+        If user logged in, queries database and grabs information"""
     user_id = session.get('user_id')
     
     if user_id is None:
