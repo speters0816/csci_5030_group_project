@@ -17,14 +17,15 @@ def login():
         password = request.form["password"]
         db = get_db()
         error = None
-        user.execute("SELECT * FROM user WHERE email = ?", (email,)
+        user = db.execute("SELECT * FROM user WHERE email = ?", (email,)
                 ).fetchone()
         
-        pass_check = check_password_hash(user["password"],password)
-
-        if user == None or pass_check == None:
-            error = "Incorrect Email and Password Combination!"
-        
+        if user == None: 
+            error = "Incorrect Email Provided!" 
+            
+        elif not check_password_hash(user["password"],password):
+            error = "Incorrect password!"
+            
         if error == None:
             session.clear()
             session["user_id"] = user["id"]
