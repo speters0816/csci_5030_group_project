@@ -45,9 +45,9 @@ def register():
         db = get_db()
         error = None
 
-        if email == None:
+        if not email: # Checking where email and password are empty values. 
             error = "Email is Required!"
-        elif password == None:
+        elif not password:
             error = "Password is Required!"
 
         if error == None:
