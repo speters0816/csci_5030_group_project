@@ -46,9 +46,9 @@ def register():
         error = None
 
         if email == None:
-            error("Email is Required!")
+            error = "Email is Required!"
         elif password == None:
-            error("Password is Required!")
+            error = "Password is Required!"
 
         if error == None:
             try:
