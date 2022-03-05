@@ -42,7 +42,7 @@ def create_app(test_config=None):
     @app.route('/logout')
     def logout():
         session.clear()
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     
     # a simple page that prints the view number
     # index page
