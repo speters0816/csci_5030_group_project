@@ -26,9 +26,19 @@ def create_app(test_config=None):
     # Register db connection with app
     from . import db
     db.init_app(app)
-    
-    
+
+
+    from . import auth
+    app.register_blueprint(auth.bp)
+
     @app.route("/")
+    @auth.login_required
+    def index():
+        username = g.user["username"] # Grabs username from database fetch stored in g upon user request of the page
+                                      # Stored in auth.py
+        return render_template('index.html',username=username)
+
+    @app.route("/login")
     def login():
         return render_template('login_1.html')
     
