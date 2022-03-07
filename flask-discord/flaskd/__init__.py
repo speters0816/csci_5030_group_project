@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, g, session, redirect, url_for
 
 def create_app(test_config=None):
     # create and configure the app. aka Application Factory
@@ -38,20 +38,11 @@ def create_app(test_config=None):
                                       # Stored in auth.py
         return render_template('index.html',username=username)
 
-    @app.route("/login")
-    def login():
-        return render_template('login_1.html')
-    
-    # register page need to establish and connect db
-    @app.route('/register', methods=["POST", "GET"])
-    def register():
-        return render_template('register.html')
-    
     #Logout redirects to login page
     @app.route('/logout')
     def logout():
         session.clear()
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     
     # a simple page that prints the view number
     # index page
