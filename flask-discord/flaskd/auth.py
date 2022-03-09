@@ -9,6 +9,17 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flaskd.db import get_db
 
 bp = Blueprint('auth',__name__,url_prefix='/auth')
+#
+@bp.route("/settings",methods=("GET","POST"))
+def change_username():
+    if request.method == "POST":
+        new_username=request.form["uname"]
+        email=request.form['email']
+        # print(new_username)
+        db = get_db()
+        db.execute("UPDATE user SET username =? WHERE email=?",(new_username,email))
+        db.commit()
+    return render_template("settings.html")
 
 @bp.route("/login",methods=("GET","POST"))
 def login():
