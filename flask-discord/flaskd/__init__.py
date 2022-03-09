@@ -36,7 +36,7 @@ def create_app(test_config=None):
     def index():
         username = g.user["username"] # Grabs username from database fetch stored in g upon user request of the page
                                       # Stored in auth.py
-        return render_template('index.html',username=username)
+        return render_template('layout.html',username=username)
 
     #Logout redirects to login page
     @app.route('/logout')
