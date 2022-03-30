@@ -28,12 +28,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
 	var socket = io();
+  var name = {{username|tojson}};
 	socket.on("connect", function() {
 		socket.emit("join", { 
 			timestamp: "Time",
-			username: "Test",
+			username: name,
 			room: "General",
 			message: "I\'m connected!"});
+	});
+  socket.on("chat message", function(json) {
+		
+		var item = document.createElement('li');
+		item.textContent = json["message"];
+		messages.appendChild(item);
 	});
 </script>
 
@@ -71,6 +78,7 @@
 <td  bgcolor= "#eee" height="400" width="1100">
 <center>
 <h4>Chat Box</h4>
+  <ul id="messages"></ul>
 </center>
 </td>
 

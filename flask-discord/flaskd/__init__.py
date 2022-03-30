@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, g, session, redirect, url_for
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 
 def create_app(test_config=None):
     # create and configure the app. aka Application Factory
@@ -76,6 +76,9 @@ def create_app(test_config=None):
     def on_join(data):
         room = data["room"]
         username = data["username"]
-        print(username, " has joined ",room, " chat")
+        timestamp = data["timestamp"]
+        join_room(room)
+        data["message"] = username + " has joined " + room
+        emit("chat message",data,json=True,to=room)
         
     return app
