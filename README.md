@@ -15,5 +15,7 @@ Backend tests are ran using the module pytest and are located in the project dir
 
 To run backend tests:  
 1. Install python 3.7.
-2. Install the following python packages using pip: flask, flask-socketio, and pytest. E.g. `pip install flask flask-socketio pytest`
-3. In the flask-discord directory, run `python3 -m pytest`
+2. Install the following python packages using pip: flask, flask-socketio, and pytest.  
+`pip install flask flask-socketio pytest`
+3. In the flask-discord directory, run:  
+`python3 -m pytest backend_tests/`
