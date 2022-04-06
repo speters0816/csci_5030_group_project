@@ -6,6 +6,27 @@ from flask_socketio import SocketIO, send, emit, join_room, leave_room
 def create_app(test_config=None):
     # create and configure the app. aka Application Factory
     app = Flask(__name__, instance_relative_config=True)
+    
+    # Socket implementation
+    app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+    socketio = SocketIO(app)
+    
+    # Basic chat interface for testing purposes
+    @app.route('/chat')
+    def sessions():
+        return render_template('chat.html')
+
+    def messageReceived(methods=['GET', 'POST']):
+        print('message was received!!!')
+
+    @socketio.on('my event')
+    def handle_my_custom_event(json, methods=['GET', 'POST']):
+        print('received my event: ' + str(json))
+        socketio.emit('my response', json, callback=messageReceived)
+
+    if __name__ == '__main__':
+        socketio.run(app, debug=True)
+        
     app.config.from_mapping(
             SECRET_KEY='dev',
             DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
