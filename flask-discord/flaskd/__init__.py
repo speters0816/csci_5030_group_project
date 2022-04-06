@@ -1,14 +1,38 @@
 import os
 
 from flask import Flask, render_template, g, session, redirect, url_for
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 
 def create_app(test_config=None):
     # create and configure the app. aka Application Factory
     app = Flask(__name__, instance_relative_config=True)
+    
+    # Socket implementation
+    app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+    socketio = SocketIO(app)
+    
+    # Basic chat interface for testing purposes
+    @app.route('/chat')
+    def sessions():
+        return render_template('chat.html')
+
+    def messageReceived(methods=['GET', 'POST']):
+        print('message was received!!!')
+
+    @socketio.on('my event')
+    def handle_my_custom_event(json, methods=['GET', 'POST']):
+        print('received my event: ' + str(json))
+        socketio.emit('my response', json, callback=messageReceived)
+
+    if __name__ == '__main__':
+        socketio.run(app, debug=True)
+        
     app.config.from_mapping(
             SECRET_KEY='dev',
             DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
             )
+    socketio = SocketIO(logger=True,engineio_logger=True)
+    socketio.init_app(app)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -65,4 +89,17 @@ def create_app(test_config=None):
                 ).fetchone()[0] #Fetchone returns tuple. 1st element contains row value
 
         return render_template('index_count.html',content=num_views)
+    
+    #from . import socket
+    #app.register_blueprint(socket.bp)
+
+    @socketio.on('join')
+    def on_join(data):
+        room = data["room"]
+        username = data["username"]
+        timestamp = data["timestamp"]
+        join_room(room)
+        data["message"] = username + " has joined " + room
+        emit("chat message",data,json=True,to=room)
+        
     return app
