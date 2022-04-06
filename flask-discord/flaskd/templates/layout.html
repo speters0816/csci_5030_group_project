@@ -9,6 +9,75 @@
     font-family: "verdana", sans-serif;
     font-size: 20px;
   }
+
+.roombtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.room {
+  position: relative;
+  display: inline-block;
+}
+
+.room-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.room-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.room-content a:hover {background-color: #ddd;}
+
+.room:hover .room-content {display: block;}
+
+.room:hover .roombtn {background-color: #3e8e41;}
+.settingsbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.settings {
+  position: relative;
+  display: inline-block;
+}
+
+.settings-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.settings-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.settings-content a:hover {background-color: #ddd;}
+
+.settings:hover .settings-content {display: block;}
+
+.settings:hover .settingsbtn {background-color: #1c1f1c;}
+
 	.chat_channel {
   background-color: black;
   width: 200px;
@@ -66,44 +135,49 @@
 
 <center>
 
-<h4><b>Channel name</h4> </b><br/>
-<input class="chat_channel" type="button" value="General"><br>
-<input type="radio" id="html"  value="Channel 2">
-<label for="html">Channel 2</label><br>
-<input type="radio" id="html"  value="Channel 3">
-<label for="html">Channel 3</label><br>
-</center>
+<div class="room">
+        <button class="roombtn">Choose chat room</button>
+        <div class="room-content">
+          <a href="file:///C:/Users/maley/Desktop/cccc/chatroom1.html">Chat Room 1</a>
+          <a href="file:///C:/Users/maley/Desktop/cccc/chatroom2.html">Chat Room 2</a>
+          
+        </div>
+      </div>
+    
+        <h4>Messages</h4>
+        <input type="radio" id="html"  value="Friend 1">
+        <label for="html">Friend 1</label><br>
+        <input type="radio" id="html"  value="Friend 2">
+        <label for="html">Friend 2</label><br>
+        <input type="radio" id="html"  value="Friend 3">
+        <label for="html">Friend 3</label><br>
+        
 </td>
 
 <td  bgcolor= "#eee" height="400" width="1100">
 <center>
-<h4>Chat Box</h4>
+<h4>Home</h4>
   <ul id="messages"></ul>
 </center>
 </td>
 
-<td  bgcolor= "#aaa" height="500" width="250">
-<center>
-<h4>Messages</h4>
-<input type="radio" id="html"  value="Friend 1">
-<label for="html">Friend 1</label><br>
-<input type="radio" id="html"  value="Friend 2">
-<label for="html">Friend 2</label><br>
-<input type="radio" id="html"  value="Friend 3">
-<label for="html">Friend 3</label><br>
-</center>
-</td>
 
 
 </tr>
 <tr>
 <td bgcolor="#aaa" colspan="1">
-<h4>*settings*</h4>
+<center>
+<div class="settings">
+    <button class="roombtn">settings</button>
+    <div class="settings-content">
+    <a href="/auth/settings" class="btn btn-primary btn-sm">Change Username </a>
+      
+    </div>
+  </div>
+</center>
 </td>
 <td bgcolor="#aaa" colspan="2">
-<input type="radio" id="html"  value="change username">
-<label for="html">change username</label><br>
-Change Username <a href="/auth/settings" class="btn btn-primary btn-sm">submit</a>
+
 </td>
 </tr>
 
