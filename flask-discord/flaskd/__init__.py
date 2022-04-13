@@ -79,7 +79,13 @@ def create_app(test_config=None):
         username = data["username"]
         timestamp = data["timestamp"]
         join_room(room)
-        data["message"] = username + " has joined " + room
+        data["message"] = username + " has joined " + room + "chat"
         emit("chat message",data,json=True,to=room)
-        
+    
+    @socketio.on('message sent')
+    def on_message(data):
+        print("Recieved! ",str(data))
+        room = data["room"]
+        emit("chat message",data,json=True,to=room)
+
     return app

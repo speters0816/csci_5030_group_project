@@ -99,21 +99,42 @@
 <title> MONEY HUNTERS </title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
-	var socket = io();
-  var name = {{username|tojson}};
-	socket.on("connect", function() {
+	document.addEventListener('DOMContentLoaded', () => {
+		var socket = io();
+		var name = {{username|tojson}};
+		var current_room = "General";
+		//socket.on("connect", function() {
 		socket.emit("join", { 
-			timestamp: "Time",
-			username: name,
-			room: "General",
-			message: "I\'m connected!"});
-	});
-  socket.on("chat message", function(json) {
+				timestamp: "Time",
+				username: name,
+				room: current_room,
+				message: "I\'m connected!"
+		});
+		//});
 		
-		var item = document.createElement('li');
-		item.textContent = json["message"];
-		messages.appendChild(item);
-	});
+		socket.on("chat message", function(json) {
+			
+			var item = document.createElement('li');
+			item.textContent = json["message"];
+			messages.appendChild(item);
+			window.scrollTo(0, document.body.scrollHeight);
+		});
+		
+		var form = document.getElementById("form");
+		var input = document.getElementById("input");
+		form.addEventListener("submit", function(e) {
+			e.preventDefault();
+			if (input.value) {
+				socket.emit('message sent', {
+					message: input.value,
+					room: current_room,
+					timestamp: "time",
+					username: name
+				}); 
+					input.value = "";
+			}
+		});
+  });
 </script>
 
 </head>
@@ -161,6 +182,8 @@
 <center>
 <h4>Home</h4>
   <ul id="messages"></ul>
+	<form id = "form" action="">
+		<input id="input" automcplete="off" /><button>Send</button>
 </center>
 </td>
 
