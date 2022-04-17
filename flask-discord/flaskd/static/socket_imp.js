@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: "verdana", sans-serif;
+    font-size: 20px;
+  }
+
+.roombtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.room {
+  position: relative;
+  display: inline-block;
+}
+
+.room-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.room-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.room-content a:hover {background-color: #ddd;}
+
+.room:hover .room-content {display: block;}
+
+.room:hover .roombtn {background-color: #3e8e41;}
+.settingsbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.settings {
+  position: relative;
+  display: inline-block;
+}
+
+.settings-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.settings-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.settings-content a:hover {background-color: #ddd;}
+
+.settings:hover .settings-content {display: block;}
+
+.settings:hover .settingsbtn {background-color: #1c1f1c;}
+
+	.chat_channel {
+  background-color: black;
+  width: 200px;
+	height: 30px;
+  color: white;
+  border: 1px solid black;
+  font-family: 'Rubik', sans-serif;
+  text-shadow: 1px 1px 1px #1B1B1B;
+	text-align: center;
+	font-size: 1.25rem;
+	padding-bottom: 1px;
+	padding-top: 1px;
+	}
+	.chat_channel:hover {
+		background-color: rgba(55,54,55);
+  }
+ div.c {
+  text-align: right;
+} 
+</style>
+<title> MONEY HUNTERS </title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+	var socket = io();
+  var name = {{username|tojson}};
+	socket.on("connect", function() {
+		socket.emit("join", { 
+			timestamp: "Time",
+			username: name,
+			room: "General",
+			message: "I\'m connected!"});
+	});
+  socket.on("chat message", function(json) {
+		
+		var item = document.createElement('li');
+		item.textContent = json["message"];
+		messages.appendChild(item);
+	});
+</script>
+
+</head>
+<body style="background-color: #565454;"> 
+<center>
+<table>
+
+<tr>
+
+<td colspan="3" bgcolor="gray">
+  <center> 
+<h3 class="font-effect-fire"> HOLA {{username}} <h3> </center>
+
+</td>
+
+
+
+
+<tr valign="top">
+<td bgcolor="#aaa" height="400"  width="250">
+
+
+<center>
+
+<div class="room">
+        <button class="roombtn">Choose chat room</button>
+        <div class="room-content">
+          <a href="file:///C:/Users/maley/Desktop/cccc/chatroom1.html">Chat Room 1</a>
+          <a href="file:///C:/Users/maley/Desktop/cccc/chatroom2.html">Chat Room 2</a>
+          
+        </div>
+      </div>
+    
+        <h4>Messages</h4>
+        <input type="radio" id="html"  value="Friend 1">
+        <label for="html">Friend 1</label><br>
+        <input type="radio" id="html"  value="Friend 2">
+        <label for="html">Friend 2</label><br>
+        <input type="radio" id="html"  value="Friend 3">
+        <label for="html">Friend 3</label><br>
+        
+</td>
+
+<td  bgcolor= "#eee" height="400" width="1100">
+<center>
+<h4>Home</h4>
+  <ul id="messages"></ul>
+</center>
+</td>
+
+
+
+</tr>
+<tr>
+<td bgcolor="#aaa" colspan="1">
+<center>
+<div class="settings">
+    <button class="roombtn">settings</button>
+    <div class="settings-content">
+    <a href="/auth/settings" class="btn btn-primary btn-sm">Change Username </a>
+      
+    </div>
+  </div>
+</center>
+</td>
+<td bgcolor="#aaa" colspan="2">
+<div class="c">
+    <button style='font-size:24px'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
+            <path d="M7.5 1v7h1V1h-1z"/>
+            <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
+          </svg>logout <i class='fas fa-sign-out-alt'></i>
+    </button>
+ </div>
+</td>
+</tr>
+
+</table>
+</center>
+</body>
+</html>

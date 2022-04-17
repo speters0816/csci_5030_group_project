@@ -1,0 +1,115 @@
+html {
+	font-size: 10px;
+}
+body {
+	background-color: rgb(184, 180, 180)
+}
+.wrapper {
+	display: grid;
+	/*grid-template-columns: 2fr 8fr;*/
+	grid-template-columns: repeat(16,minmax(0,1fr));
+	/*grid-auto-rows: minmax(25px,100px);*/
+	grid-template-rows: 25px;
+	gap: 0px;
+}
+
+.leftpane_sub1 {
+	/* border: 5px solid black; */
+  /*width: fit-content; */
+	/*box-shadow: 10px 5px 5px blue;*/
+	height: 600px;
+	grid-column: 1/2;
+	grid-row: 1/4;
+	padding: 5px;
+	/*border: 5px solid black;*/
+	background-color:rgb(97, 99, 99);
+	align-content: center;
+	text-align: center;
+	/*background-image: linear-gradient(105deg, rgb(184, 180, 180) 39%, rgba(51,56,57,1) 96%);*/
+}
+.leftpane_sub2 {
+	height: 600px;
+	grid-column: 2/4;
+	grid-row: 1/4;
+	padding: 5px;
+	text-align: center;
+}
+.userbar {
+	grid-column: 1/3;
+	grid-row: 4/4;
+	/*border: 5px solid white;*/
+	color: white;
+	font-size: 14px ;
+	background-color: rgba(22, 20, 20, 0.836);
+	align-content: center;
+	background-image: linear-gradient(105deg, rgb(0, 0, 255) 39%, rgba(51,56,57,1) 96%);
+}
+.chatdrop {
+	color: blue;
+	grid-column: 1/2;
+	width: 100%;
+}
+.chatbox {
+	color: white;
+	grid-column: 4/17;
+	grid-row: 2/4;
+	font-size: 12px;
+	box-shadow: 10px 5px 5px rgb(30, 30, 35);
+	padding: 5px;
+	background-color: rgba(255, 255, 255, 0.038);
+	/*border: 5px solid white;*/
+}
+.messagebox {
+	grid-column: 4/17;
+	grid-row: 4/4;
+	/*border: 5px solid blue; */
+	padding: 5px;
+}
+#form {
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+}
+#form > button {
+	background: blue;
+	color: white;
+	height: 80%;
+}
+#input {
+	/*border: 1px solid white;*/
+	background: rgba(0,0,0,0.15);
+	width: 90%;
+	height: 100%;
+	color: white;
+	border: 0px;
+}
+.roombtn {
+	grid-column: 3/4;
+	grid-row: 4/4;
+	background-color:rgba(51,56,57,1);
+	border:rgba(51,56,57,1);
+	color: white;
+}
+.userwrap {
+	grid-column: 1/4;
+	grid-row: 4/4;
+}
+#messages { 
+	list-style-type: none; 
+	margin: 0; 
+	padding: 1px; 
+}
+#messages > li { 
+	padding: 0.5rem 1rem; 
+}
+#messages > li:nth-child(odd) { 
+	background: #02020262; 
+}
+#lpbut {
+	margin: 10px 0px 10px 0px;
+	width: auto;
+}
+.topbar {
+	grid-column: 16/17;
+	grid-row: 1/1;
+}
