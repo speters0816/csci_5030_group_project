@@ -4,19 +4,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!-- 
 <style>
-  body {
-    font-family: "verdana", sans-serif;
-    font-size: 20px;
-  }
-
-.roombtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-}
 
 .room {
   position: relative;
@@ -96,30 +86,55 @@
   text-align: right;
 } 
 </style>
-<title> MONEY HUNTERS </title>
+-->
+<title> Super Chat 1.0 </title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
 	document.addEventListener('DOMContentLoaded', () => {
 		var socket = io();
 		var name = {{username|tojson}};
-		var current_room = "General";
+		var current_room = {{ room_id|tojson}};
+    //var current_room = "General";
 		//socket.on("connect", function() {
-		socket.emit("join", { 
-				timestamp: "Time",
-				username: name,
-				room: current_room,
-				message: "I\'m connected!"
-		});
+    //if (current_room == "Home") {
+    //  socket.on("connect", socket.emit("connection", {
+     //   username: name,
+     //   message: "I\'m connected!" 
+    //    });
+    //  );
+    //}
+    //else {
+    socket.emit("join", { 
+      timestamp: "Time",
+      username: name,
+      room: current_room,
+      message: "I\'m connected!"
+		  });
+    //
+	  //	socket.emit("join", { 
+		//		timestamp: "Time",
+		//		username: name,
+		//		room: current_room,
+		//		message: "I\'m connected!"
 		//});
 		
 		socket.on("chat message", function(json) {
-			
 			var item = document.createElement('li');
 			item.textContent = json["message"];
 			messages.appendChild(item);
 			window.scrollTo(0, document.body.scrollHeight);
 		});
 		
+    socket.on("chat join", function(json) {
+			var item = document.createElement('li');
+      var item2 = document.createElement('li');
+			item.textContent = json["username"];
+      item2.textContent = json["message"];
+			member_list.appendChild(item);
+			messages.appendChild(item2);
+			window.scrollTo(0, document.body.scrollHeight);
+		});
+
 		var form = document.getElementById("form");
 		var input = document.getElementById("input");
 		form.addEventListener("submit", function(e) {
@@ -134,87 +149,63 @@
 					input.value = "";
 			}
 		});
+
   });
 </script>
 
 </head>
-<body style="background-color: #565454;"> 
-<center>
-<table>
+<body> 
 
-<tr>
-
-<td colspan="3" bgcolor="gray">
-  <center> 
-<h3 class="font-effect-fire"> HOLA {{username}} <h3> </center>
-
-</td>
-
-
-
-
-<tr valign="top">
-<td bgcolor="#aaa" height="400"  width="250">
-
-
-<center>
-
-<div class="room">
-        <button class="roombtn">Choose chat room</button>
-        <div class="room-content">
-          <a href="file:///C:/Users/maley/Desktop/cccc/chatroom1.html">Chat Room 1</a>
-          <a href="file:///C:/Users/maley/Desktop/cccc/chatroom2.html">Chat Room 2</a>
-          
-        </div>
-      </div>
+  <div class="wrapper">
+    <div class="leftpane_sub1">
+      <form action="/Home" method="get">
+        <button id="lpbut">Home</button>
+      </form>
+      <form action="/General" method="get">
+        <button id="lpbut" action="">General</button>
+      </form>
+      <button id="lpbut">+</button>
+     <!-- <select class="chatdrop" name="chatroom" id="chatroom-select">
+        <option value="general">General</option>
+        <option value="sports">Sports</option>
+        <option value="relationship-woes">Relationships-Woes</option>
+      </select> --> 
+    </div>
     
-        <h4>Messages</h4>
-        <input type="radio" id="html"  value="Friend 1">
-        <label for="html">Friend 1</label><br>
-        <input type="radio" id="html"  value="Friend 2">
-        <label for="html">Friend 2</label><br>
-        <input type="radio" id="html"  value="Friend 3">
-        <label for="html">Friend 3</label><br>
-        
-</td>
+    <div class="leftpane_sub2">
+      <p id="room_id">{{ room_id }}</p>
+      <p id="member_header">{{ member_header }}</p>
+      <ul id="member_list">
 
-<td  bgcolor= "#eee" height="400" width="1100">
-<center>
-<h4>Home</h4>
-  <ul id="messages"></ul>
-	<form id = "form" action="">
-		<input id="input" automcplete="off" /><button>Send</button>
-</center>
-</td>
+      </ul>
+    </div>
 
+    <div class ="topbar">
+      <div id = "navigate">
+        <button>Notifications</button>
+        <form action="/logout" method="get">
+          <button id="logout" action="/logout" method="get" >Logout</button>
+        </form>
+      </div>
+    </div>
 
+    <div class="userbar">
+      <p id="displayname">{{ username }}</p>
+    </div>
 
-</tr>
-<tr>
-<td bgcolor="#aaa" colspan="1">
-<center>
-<div class="settings">
-    <button class="roombtn">settings</button>
-    <div class="settings-content">
-    <a href="/auth/settings" class="btn btn-primary btn-sm">Change Username </a>
-      
+    <div class="settingsgrid">
+        <form id="settingsform" action="/auth/settings" method="get">
+          <button class="settingsbtn">settings</button>
+        </form>
+    </div>
+
+    <div class="chatbox">
+      <ul id="messages"></ul>
+    </div>
+
+    <div class="messagebox">
+      <form id = "form" action="">
+        <input id="input" autocomplete="off" /><button class="submitbutton">Send</button>
     </div>
   </div>
-</center>
-</td>
-<td bgcolor="#aaa" colspan="2">
-<div class="c">
-    <button style='font-size:24px'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
-            <path d="M7.5 1v7h1V1h-1z"/>
-            <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
-          </svg>logout <i class='fas fa-sign-out-alt'></i>
-    </button>
- </div>
-</td>
-</tr>
-
-</table>
-</center>
 </body>
-</html>

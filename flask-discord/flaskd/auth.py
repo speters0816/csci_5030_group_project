@@ -19,6 +19,8 @@ def change_username():
         db = get_db()
         db.execute("UPDATE user SET username =? WHERE email=?",(new_username,email))
         db.commit()
+        return redirect(url_for("index", room_id="Home"))
+    
     return render_template("settings.html")
 
 @bp.route("/login",methods=("GET","POST"))
@@ -41,7 +43,7 @@ def login():
             session.clear()
             session["user_id"] = user["id"]
 
-            return redirect(url_for("index"))
+            return redirect(url_for("index", room_id="Home"))
 
         flash(error)
 

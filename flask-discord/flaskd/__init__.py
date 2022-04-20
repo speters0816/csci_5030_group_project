@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, render_template, g, session, redirect, url_for
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from markupsafe import escape
 
 def create_app(test_config=None):
     # create and configure the app. aka Application Factory
@@ -35,12 +36,19 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
-    @app.route("/")
+    @app.route("/<room_id>")
     @auth.login_required
-    def index():
+    def index(room_id):
+        room_id=escape(room_id)
+        member_header = "Members"
+        
+        # Show direct messages on Home page or Member list in specific room
+        if room_id == "Home":
+            member_header="Direct Messages"
+        
         username = g.user["username"] # Grabs username from database fetch stored in g upon user request of the page
                                       # Stored in auth.py
-        return render_template('layout.html',username=username)
+        return render_template('layout.html',username=username,room_id=room_id,member_header=member_header)
 
     #Logout redirects to login page
     @app.route('/logout')
@@ -79,8 +87,8 @@ def create_app(test_config=None):
         username = data["username"]
         timestamp = data["timestamp"]
         join_room(room)
-        data["message"] = username + " has joined " + room + "chat"
-        emit("chat message",data,json=True,to=room)
+        data["message"] = username + " has joined " + room + " chat"
+        emit("chat join",data,json=True,to=room)
     
     @socketio.on('message sent')
     def on_message(data):
