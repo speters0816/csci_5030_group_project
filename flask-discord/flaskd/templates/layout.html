@@ -5,88 +5,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<!-- 
-<style>
 
-.room {
-  position: relative;
-  display: inline-block;
-}
-
-.room-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.room-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.room-content a:hover {background-color: #ddd;}
-
-.room:hover .room-content {display: block;}
-
-.room:hover .roombtn {background-color: #3e8e41;}
-.settingsbtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-}
-
-.settings {
-  position: relative;
-  display: inline-block;
-}
-
-.settings-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.settings-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-.settings-content a:hover {background-color: #ddd;}
-
-.settings:hover .settings-content {display: block;}
-
-.settings:hover .settingsbtn {background-color: #1c1f1c;}
-
-	.chat_channel {
-  background-color: black;
-  width: 200px;
-	height: 25px;
-  color: white;
-  border: 1px solid black;
-  font-family: 'Rubik', sans-serif;
-  text-shadow: 1px 1px 1px #1B1B1B;
-	text-align: center;
-	font-size: 1.25rem;
-	}
-	.chat_channel:hover {
-		background-color: rgba(55,54,55);
-  }
- div.c {
-  text-align: right;
-} 
-</style>
--->
 <title> Super Chat 1.0 </title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
@@ -94,33 +13,48 @@
 		var socket = io();
 		var name = {{username|tojson}};
 		var current_room = {{ room_id|tojson}};
-    //var current_room = "General";
-		//socket.on("connect", function() {
-    //if (current_room == "Home") {
-    //  socket.on("connect", socket.emit("connection", {
-     //   username: name,
-     //   message: "I\'m connected!" 
-    //    });
-    //  );
-    //}
-    //else {
+
+    function addMembers(listObject,users) {
+      listItems = listObject.getElementsByTagName('li');
+      console.log('tried function');
+      len = users.length - listItems.length; // If new user joins, only add new user.
+      console.log(len)
+
+      // If new member, loop through all current members. If old member, append new member.
+      for (let i = listItems.length; i < users.length; i++) {
+        var item = document.createElement('li');
+        item.textContent = users[i];
+        listObject.appendChild(item);
+      }
+    }
+
+    function removeMember(listObject, user) {
+      listItems = listObject.getElementsByTagName('li');
+      //console.log(`user ${user}`);
+      for (let i = 0; i < listItems.length; i++) {
+        const item = listItems[i];
+        console.log(item);
+        if (item.textContent === user ) {
+          //console.log("user found!");
+          let tossNode = listObject.removeChild(item);
+          console.log(`Removing ${item}`);
+        }
+        //console.log(listItems[i]);
+      }
+    }
+
     socket.emit("join", { 
       timestamp: "Time",
       username: name,
       room: current_room,
-      message: "I\'m connected!"
+      message: "I\'m connected!" 
 		  });
-    //
-	  //	socket.emit("join", { 
-		//		timestamp: "Time",
-		//		username: name,
-		//		room: current_room,
-		//		message: "I\'m connected!"
-		//});
 		
 		socket.on("chat message", function(json) {
 			var item = document.createElement('li');
-			item.textContent = json["message"];
+      const time = new Date(json["timestamp"] + "UTC");
+			item.textContent = time.toLocaleTimeString() + " " + json["username"] + ": " + json["message"];
+      console.log(time.toLocaleTimeString());
 			messages.appendChild(item);
 			window.scrollTo(0, document.body.scrollHeight);
 		});
@@ -128,9 +62,11 @@
     socket.on("chat join", function(json) {
 			var item = document.createElement('li');
       var item2 = document.createElement('li');
-			item.textContent = json["username"];
+      let array = json["current_users"];
+      console.log(array);
+      console.log(member_list);
+      addMembers(member_list,json["current_users"]);
       item2.textContent = json["message"];
-			member_list.appendChild(item);
 			messages.appendChild(item2);
 			window.scrollTo(0, document.body.scrollHeight);
 		});
@@ -150,7 +86,38 @@
 			}
 		});
 
+    function emitLeave() {
+      // Emits socket command to leave chat room for current user and update current_users list
+      socket.emit("leave", {
+        room: current_room,
+        timestamp: "empty",
+        username: name
+      });
+    }
+      const roomContainer = document.querySelector(".leftpane_sub1");
+      console.log(roomContainer);
+      roomContainer.addEventListener("click", (event) => {
+        console.log("Room button clicked")
+        const isButton = event.target.nodeName === "BUTTON";
+        console.log(isButton);
+        if (isButton) {
+          emitLeave();
+        }
+      });
+
+      socket.on("chat leave",function(json) {
+        const targetUser = json["username"];
+        removeMember(member_list,targetUser);
+      });
+      
+      // Remove user from Online members upon logout
+      const logoutBtn = document.getElementById("logout");
+      logoutBtn.onclick = emitLeave;
+      
+
+
   });
+
 </script>
 
 </head>
@@ -163,8 +130,8 @@
       </form>
       <form action="/General" method="get">
         <button id="lpbut" action="">General</button>
-      </form>
-      <button id="lpbut">+</button>
+       </form>
+      <button id="addchannel" action="/channels/create" method="/get">+</button>
      <!-- <select class="chatdrop" name="chatroom" id="chatroom-select">
         <option value="general">General</option>
         <option value="sports">Sports</option>
@@ -184,7 +151,7 @@
       <div id = "navigate">
         <button>Notifications</button>
         <form action="/logout" method="get">
-          <button id="logout" action="/logout" method="get" >Logout</button>
+          <button id="logout">Logout</button>
         </form>
       </div>
     </div>
