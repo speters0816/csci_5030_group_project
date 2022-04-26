@@ -3,6 +3,7 @@ import time
 from flask import Flask, render_template, g, session, redirect, url_for, request
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from markupsafe import escape
+import pickle
 
 def create_app(test_config=None):
     # create and configure the app. aka Application Factory
@@ -39,7 +40,7 @@ def create_app(test_config=None):
     @app.route("/")
     def index():
         """Redirect user to 'home' room """
-        return redirect("/Home")
+        return redirect("/Random")
 
     @app.route("/<room_id>")
     @auth.login_required
@@ -82,6 +83,7 @@ def create_app(test_config=None):
                 ).fetchone()[0] #Fetchone returns tuple. 1st element contains row value
 
         return render_template('index_count.html',content=num_views)
+
     @app.route('/channels/create', methods=["POST","GET"])
     def create_channel():
         if request.method == "POST":
@@ -91,10 +93,35 @@ def create_app(test_config=None):
         
         return(render_template("create_channel.html"))
 
+    def save_history(obj,outPath):
+        """Saves obj as binary file with pickle to filepath """
+        
+        # Save chat history
+        with open(outPath,"wb")as f :
+            pickle.dump(obj,f)
+    
+    print("chat pickle saved!")
+
+    def load_history(objPath):
+        """Loads pickled object """
+        with open(objPath,"rb") as f:
+            message_history = pickle.load(f)
+        
+        return message_history
+
+    outFile= os.path.join(os.getcwd(),"flaskd","history","chat_history")
+    # Load message history if available
+    if os.path.isfile(outFile):
+        message_history = load_history(outFile)
+        print("loaded chat history from pickle!")
+        print(type(message_history))
+    else:
+        message_history = {}
 
     #from . import socket
     #app.register_blueprint(socket.bp)
     current_users = {}
+
     @socketio.on('join')
     def on_join(data):
         room = data["room"]
@@ -108,18 +135,31 @@ def create_app(test_config=None):
         if username not in current_users[room]:
             current_users[room].append(username)
 
+        # Add message to chat history 
+        if room not in message_history:
+            message_history[room] = []
+
         data["current_users"] = current_users[room]
         data["message"] = username + " has joined " + room + " chat"
+        data["message_history"] = message_history[room]
+        
         print("current Users: ",current_users)
         join_room(room)
         emit("chat join",data,json=True,to=room)
-    
+
+
     @socketio.on('message sent')
     def on_message(data):
         print("Recieved! ",str(data))
+
         data["timestamp"] = time.strftime("%B %d %Y %H:%M:%S %z",time.gmtime())
-        print(data["timestamp"])
         room = data["room"]
+
+        message = data["timestamp"] + " " + data["username"] + "\n" + data["message"]
+        message_history[room].append(message)
+
+        save_history(message_history,outFile)
+        print("message history: ",message_history)
         emit("chat message",data,json=True,to=room)
 
     @socketio.on("leave")

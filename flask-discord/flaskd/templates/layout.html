@@ -42,6 +42,15 @@
         //console.log(listItems[i]);
       }
     }
+    function renderMessageHistory(listObject,messages) {
+      for (let i = 0; i < messages.length; i++) {
+        const item = document.createElement('li');
+        const content = messages[i];
+        item.textContent = content;
+        listObject.appendChild(item);
+
+      }
+    }
 
     socket.emit("join", { 
       timestamp: "Time",
@@ -53,7 +62,7 @@
 		socket.on("chat message", function(json) {
 			var item = document.createElement('li');
       const time = new Date(json["timestamp"] + "UTC");
-			item.textContent = time.toLocaleTimeString() + " " + json["username"] + ": " + json["message"];
+			item.textContent =  json["username"] + " " + time.toLocaleTimeString() + "\n" + json["message"];
       console.log(time.toLocaleTimeString());
 			messages.appendChild(item);
 			window.scrollTo(0, document.body.scrollHeight);
@@ -63,8 +72,11 @@
 			var item = document.createElement('li');
       var item2 = document.createElement('li');
       let array = json["current_users"];
+      message_history = json["message_history"];
+
       console.log(array);
       console.log(member_list);
+      renderMessageHistory(messages,message_history);
       addMembers(member_list,json["current_users"]);
       item2.textContent = json["message"];
 			messages.appendChild(item2);
@@ -125,13 +137,16 @@
 
   <div class="wrapper">
     <div class="leftpane_sub1">
-      <form action="/Home" method="get">
-        <button id="lpbut">Home</button>
+      <form action="/Random" method="get">
+        <button id="lpbut">Random</button>
       </form>
-      <form action="/General" method="get">
-        <button id="lpbut" action="">General</button>
+      <form action="/News" method="get">
+        <button id="lpbut" action="">News</button>
        </form>
-      <button id="addchannel" action="/channels/create" method="/get">+</button>
+       <form action="/Music" method="get">
+        <button id="lpbut" action="">Music</button>
+        </form>
+     <!--  <button id="addchannel" action="/channels/create" method="/get">+</button> -->
      <!-- <select class="chatdrop" name="chatroom" id="chatroom-select">
         <option value="general">General</option>
         <option value="sports">Sports</option>
@@ -149,7 +164,7 @@
 
     <div class ="topbar">
       <div id = "navigate">
-        <button>Notifications</button>
+       <button>Notifications</button>
         <form action="/logout" method="get">
           <button id="logout">Logout</button>
         </form>
@@ -172,7 +187,7 @@
 
     <div class="messagebox">
       <form id = "form" action="">
-        <input id="input" autocomplete="off" /><button class="submitbutton">Send</button>
+        <input id="input" autocomplete="off" /> <!-- <button class="submitbutton">Send</button> -->
     </div>
   </div>
 </body>
