@@ -4,6 +4,7 @@ from flask import Flask, render_template, g, session, redirect, url_for, request
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from markupsafe import escape
 import pickle
+import calendar
 
 def create_app(test_config=None):
     # create and configure the app. aka Application Factory
@@ -150,16 +151,37 @@ def create_app(test_config=None):
 
     @socketio.on('message sent')
     def on_message(data):
+        new_message = data["message"]
         print("Recieved! ",str(data))
-
-        data["timestamp"] = time.strftime("%B %d %Y %H:%M:%S %z",time.gmtime())
+        time_format = "%B %d %Y %H:%M:%S %z"
+        data["timestamp"] = time.strftime(time_format,time.gmtime())
+        print(data["timestamp"])
         room = data["room"]
+        
+        # Grab last message before appending new
+        lenRoomHistory = len(message_history[room])
+        print("Room: ",room," len: ",lenRoomHistory)
+        if lenRoomHistory != 0:
+            data["previous_message"] = message_history[room][lenRoomHistory-1]
+        else:
+           data["previous_message"] = ["Null","April 28 0001 03:12:15 -0600","Null"]
 
-        message = data["timestamp"] + " " + data["username"] + "\n" + data["message"]
-        message_history[room].append(message)
+        newMsg_gmtime = time.strptime(data["timestamp"],time_format)
+        prevMsg_gmtime = time.strptime(data["previous_message"][1],time_format)
+        prevUser = data["previous_message"][0]
+        newUser = data["username"]
+        print("TIme diff: ",calendar.timegm(newMsg_gmtime) - calendar.timegm(prevMsg_gmtime))
+        # If continuation of user message, append to history rather than create new entry
+        if (calendar.timegm(newMsg_gmtime) - calendar.timegm(prevMsg_gmtime) < 300 and newUser == prevUser):
+            print("working!")
+            message_history[room][lenRoomHistory-1][-1].append(new_message)
+        else:
+        #message = data["username"] + " " + data["timestamp"] + " " + data["message"] # This doesn't actually change the original user message. Updates it for history
+            message = [data["username"],data["timestamp"],[data["message"]] ] # This doesn't actually change the original user message. Updates it for history
+            message_history[room].append(message)
 
         save_history(message_history,outFile)
-        print("message history: ",message_history)
+        #print("message history: ",message_history)
         emit("chat message",data,json=True,to=room)
 
     @socketio.on("leave")

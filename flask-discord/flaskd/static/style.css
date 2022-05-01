@@ -60,7 +60,8 @@ body {
 	font-size: 12px;
 	/*box-shadow: 10px 5px 5px rgb(30, 30, 35); */
 	padding: 5px;
-	background-color: rgba(27, 28, 29, 0.699);
+	/*background-color: rgba(27, 28, 29, 0.699);*/
+	background-color: rgba(27, 28, 29, 0.912);
 	overflow: scroll;
 	height: 600px;
 	width: 100%;
@@ -111,6 +112,25 @@ body {
 	width: 100%;
 	height: 100%;
 }
+.settingsbtn:hover {
+	background-color: grey;
+}
+.leftpane_sub1 button {
+	background-color:rgba(51,56,57,1);
+	border:rgba(51,56,57,1);
+	color: white;
+	width: 100%;
+	height: 50px;
+	border-radius: 5%;
+	border: 1px solid white;
+	box-shadow: 0px 0px 10px 0px rgba(22, 20, 20, 0.836);
+}
+.leftpane_sub1 button:hover {
+	background-color: grey;
+}
+.leftpane_sub1 button:active {
+	background-color: grey;
+}
 .userwrap {
 	grid-column: 1/4;
 	grid-row: 4/4;
@@ -120,14 +140,15 @@ body {
 	margin: 0; 
 	padding: 1px; 
 	width: auto;
-	font-size: 14px;
-	white-space: pre-wrap;
+	/*font-size: 14px;*/
+	/*white-space: pre-wrap*/;
 
 }
 #messages > li { 
 	padding: 0.5rem 1rem; 
 	width: auto;
-	display: flex;
+	line-height: 1;
+	/*display: flex*/;
 }
 /*#messages > li:nth-child(odd) { 
 	background: #02020262; 
@@ -137,18 +158,56 @@ body {
 	width: 100%;
 }
 .topbar {
-	align-items: center;
-	grid-column: 15/17;
+	align-items: right;
+	grid-column: 16/17;
 	grid-row: 1/1;
+	text-align: right;
 }
 
 .topbar > #navigate {
-	display: inline-flex;
+	/*display: inline-flex;*/
 
 }
-
+#logout {
+	background-color: black;
+	border-radius: 5%;
+	border: 1px solid black;
+	box-shadow: 0px 0px 5px 0px;
+	color: white;
+	height: 50px;
+}
+#logout:hover {
+	background-color: red;
+}
 #member_list {
 	list-style-type: none; 
 	margin: 0; 
 	padding: 1px; 
 }
+
+li span {
+	padding: 15px;
+	font-size: 12px;
+	color: rgb(29, 63, 232);
+}
+#messages {
+	font-family: 'Rubik', sans-serif;
+}
+
+#messages li {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+	line-height: 1.5;
+	font-family: 'Rubik', sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	align-content: center;
+}
+
+li p {
+	padding: 0px;
+	line-height: 0.5;
+	font-size: 14px;
+	font-family: 'Cabin', sans-serif;
+} 
+

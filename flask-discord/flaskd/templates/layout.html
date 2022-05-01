@@ -3,9 +3,8 @@
 <head>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Cabin&family=Rajdhani:wght@300&family=Rubik:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <title> Super Chat 1.0 </title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
@@ -43,15 +42,45 @@
       }
     }
     function renderMessageHistory(listObject,messages) {
+      // Renders message history using history array of array
+      // History array contains [0] username , [1] timestamp, [2] message
       for (let i = 0; i < messages.length; i++) {
         const item = document.createElement('li');
-        const content = messages[i];
-        item.textContent = content;
+        const timeSpan = document.createElement('span');
+        //const usrMessage = document.createElement('p');
+        //const header = messages[i].split("|")[0];
+        //const content = messages[i];
+        const msgArray = messages[i];
+        item.textContent = msgArray[0];
+        console.log(msgArray[0]);
+        console.log(msgArray[1]);
+        console.log(msgArray[2]);
+        //item.setAttribute('style', 'line-height: 0');
+
+        const time = new Date( msgArray[1] + "UTC");
+        timeSpan.textContent = "     " + time.toLocaleTimeString();
+        //timeSpan.setAttribute('style', 'font-size: 12px;');
+        item.appendChild(timeSpan);
+        for (let i = 0; i < msgArray[2].length; i++) {
+          let usrMessage = document.createElement('p');
+          usrMessage.textContent = msgArray[2][i];
+          item.appendChild(usrMessage);
+        }
+        //usrMessage.textContent = msgArray[2];
+        //usrMessage.setAttribute('style', 'line-height: 0;')
+        
+        //item.appendChild(timeSpan);
+        //item.appendChild(usrMessage);
+
+        //item.textContent = content;
         listObject.appendChild(item);
 
       }
     }
-
+    function scrollToBot(className) {
+      const object = document.querySelector(className);
+      object.scrollTo(0, object.scrollHeight);
+    }
     socket.emit("join", { 
       timestamp: "Time",
       username: name,
@@ -60,27 +89,66 @@
 		  });
 		
 		socket.on("chat message", function(json) {
-			var item = document.createElement('li');
-      const time = new Date(json["timestamp"] + "UTC");
-			item.textContent =  json["username"] + " " + time.toLocaleTimeString() + "\n" + json["message"];
+      const time = new Date(json["timestamp"] + "UTC"); //+ "UTC");
+      console.log(time);
+
+      const previous_message_array = json["previous_message"];
+      //console.log(previous_message);
+      //console.log(previous_message[0])
+      console.log(name);
+      const previous_user = previous_message_array[0];
+      const previous_time = new Date(previous_message_array[1] + "UTC");
+      console.log(time - previous_time > 300*100);
+      console.log(time - previous_time);
+      //}
+      
+      var userMessage = document.createElement('p');
+      var lastObject = messages.lastChild;
+      console.log(messages.lastChild.textContent);
+      console.log(messages.lastElementChild);
+      userMessage.textContent = json["message"];
+      //(name != json["username"] || lastMessageTime - time > (300*1000)) { //5min 3000000milliseconds 
+      if (previous_user != name || time - previous_time > 300*1000 || lastObject.className === "join_message" ) {
+        var item = document.createElement('li');
+        //var item = document.createElement('li');
+        var test = document.createElement('span');
+        console.log("It's working!");
+        test.textContent = "     " + time.toLocaleTimeString();
+        test.setAttribute('style', 'font-size: 12px;');
+        item.textContent =  json["username"];
+        item.appendChild(test);
+        item.appendChild(userMessage);
+        messages.appendChild(item);
+      }
+      else {
+        lastObject.appendChild(userMessage)
+        //last.textContent = json["message"];
+        //item.textContent =  json["message"];
+
+      }
       console.log(time.toLocaleTimeString());
-			messages.appendChild(item);
-			window.scrollTo(0, document.body.scrollHeight);
+			
+      console.log(document.querySelector(".chatbox"));
+      //messages.appendChild(item);
+      scrollToBot(".chatbox");
 		});
 		
     socket.on("chat join", function(json) {
 			var item = document.createElement('li');
       var item2 = document.createElement('li');
+      item2.className = "join_message"
       let array = json["current_users"];
       message_history = json["message_history"];
 
       console.log(array);
       console.log(member_list);
+      console.log(message_history);
       renderMessageHistory(messages,message_history);
       addMembers(member_list,json["current_users"]);
       item2.textContent = json["message"];
+      item2.setAttribute('style','font-size: 8px; text-align: right;');
 			messages.appendChild(item2);
-			window.scrollTo(0, document.body.scrollHeight);
+      scrollToBot(".chatbox");
 		});
 
 		var form = document.getElementById("form");
@@ -146,12 +214,6 @@
        <form action="/Music" method="get">
         <button id="lpbut" action="">Music</button>
         </form>
-     <!--  <button id="addchannel" action="/channels/create" method="/get">+</button> -->
-     <!-- <select class="chatdrop" name="chatroom" id="chatroom-select">
-        <option value="general">General</option>
-        <option value="sports">Sports</option>
-        <option value="relationship-woes">Relationships-Woes</option>
-      </select> --> 
     </div>
     
     <div class="leftpane_sub2">
@@ -164,7 +226,7 @@
 
     <div class ="topbar">
       <div id = "navigate">
-       <button>Notifications</button>
+       <!-- <button>Notifications</button> -->
         <form action="/logout" method="get">
           <button id="logout">Logout</button>
         </form>
