@@ -25,8 +25,34 @@ def test_insert_user(app):
     with app.app_context():
         db = get_db()
         email = "ted@yahoo.com"
+        username = "CoolTed"
+        db.execute("INSERT INTO user (email,username, password) VALUES (?, ?, ?)", (email, username, generate_password_hash("test"))
+                )
+        db.commit()
+        user = db.execute("SELECT * FROM user WHERE email = ?", (email,)
+                ).fetchone()
 
-        db.execute("INSERT INTO user (email,password) VALUES (?, ?)", (email, generate_password_hash("test"))
+        assert user[1] == email
+
+def test_duplicate_insert(app):
+    with app.app_context():
+        db = get_db()
+        email = "test@gmail.com"
+        username = "CoolTom"
+        db.execute("INSERT INTO user (email,username,password) VALUES (?, ?, ?)", (email, username, generate_password_hash("test"))
+                )
+        db.commit()
+        
+        assert db.execute("SELECT * FROM user WHERE email = ?", (email,)
+                ).fetchone()
+
+
+def test_overlength_username(app):
+    with app.app_context():
+        db = get_db()
+        email = "sam@yahoo.com"
+        username = "CoolSammmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
+        db.execute("INSERT INTO user (email,username, password) VALUES (?, ?, ?)", (email, username, generate_password_hash("test"))
                 )
         db.commit()
         user = db.execute("SELECT * FROM user WHERE email = ?", (email,)

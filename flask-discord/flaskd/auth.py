@@ -42,7 +42,6 @@ def login():
         if error == None:
             session.clear()
             session["user_id"] = user["id"]
-
             return redirect(url_for("index", room_id="Home"))
 
         flash(error)
@@ -55,6 +54,7 @@ def register():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
+        username = request.form["username"]
         db = get_db()
         error = None
 
@@ -62,22 +62,33 @@ def register():
             error = "Email is Required!"
         elif not password:
             error = "Password is Required!"
-
-        if error == None:
-            try:
-                db.execute("INSERT INTO user (email,password) VALUES (?, ?)", (email, generate_password_hash(password)))
-
-                db.commit()
+        elif not username:
+            error = "Username is Required"
+        elif len(username) > 32:
+            error = "Error! Username too long. Please make it less than 32 characters long"
             
-            except db.IntegrityError:
-                error = "Email {} is already registered.".format(email)
-
+        if error == None:
+            # Check if user already exists
+            if db.execute("SELECT * FROM user WHERE email = ?", (email,)
+                ).fetchone() != None:
+                error = "Email already registered"
+            
             else:
-                return redirect(url_for("auth.login"))
+                try:
+                    db.execute("INSERT INTO user (email,username, password) VALUES (?, ?, ?)", (email, username, generate_password_hash(password)))
+
+                    db.commit()
+                
+                except db.IntegrityError:
+                    error = "Username {} is already taken.".format(username)
+
+                else:
+                    flash("You successfully registered!")
+                    return redirect(url_for("auth.login"))
 
         flash(error)
 
-    return render_template("register.html")
+    return render_template("register_2.html")
 
 @bp.before_app_request
 def load_logged_in_user():
