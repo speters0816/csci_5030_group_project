@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS siteViews;
 
 CREATE TABLE user (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	email TEXT UNIQUE NOT NULL,
-	username TEXT NOT NULL DEFAULT "myspace Tom" CHECK( length(username) <= 32),
+	email TEXT,
+	username TEXT NOT NULL CHECK( length(username) <= 32),
 	password TEXT NOT NULL
 );
 

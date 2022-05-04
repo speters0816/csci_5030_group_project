@@ -28,16 +28,19 @@ body {
 	/*background-image: linear-gradient(105deg, rgb(184, 180, 180) 39%, rgba(51,56,57,1) 96%);*/
 }
 .leftpane_sub2 {
-	height: 600px;
+	height: 610px;
 	grid-column: 2/4;
 	grid-row: 1/4;
-	padding: 5px;
+	padding: 0px;
 	text-align: center;
 	font-size: 16px;
 	background-color: rgb(221, 221, 221);
 }
+.leftpane_sub2 {
+	font-family: 'Rubik', sans-serif;
+}
 .userbar {
-	grid-column: 1/3;
+	grid-column: 1/4;
 	grid-row: 4/4;
 	/*border: 5px solid white;*/
 	color: white;
@@ -45,7 +48,7 @@ body {
 	background-color: rgba(22, 20, 20, 0.836);
 	text-align: left;
 	background-image: linear-gradient(105deg, rgb(0, 0, 255) 39%, rgba(51,56,57,1) 96%);
-	width: 100%;
+	/*width: 100%;*/
 	padding: 0px 0px 0px 5px;
 }
 .chatdrop {

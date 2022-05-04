@@ -26,15 +26,16 @@ def change_username():
 @bp.route("/login",methods=("GET","POST"))
 def login():
     if request.method == "POST":
-        email = request.form["email"]
+        #email = request.form["email"]
+        username = request.form["username"]
         password = request.form["password"]
         db = get_db()
         error = None
-        user = db.execute("SELECT * FROM user WHERE email = ?", (email,)
+        user = db.execute("SELECT * FROM user WHERE username = ?", (username,)
                 ).fetchone()
         
         if user == None: 
-            error = "Incorrect Email Provided!" 
+            error = "Username Not Found!" 
             
         elif not check_password_hash(user["password"],password):
             error = "Incorrect password!"
@@ -46,21 +47,22 @@ def login():
 
         flash(error)
 
-    return render_template("login_1.html")
+    return render_template("login_2.html")
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     """ Registers user from regiseter.html form submission"""
     if request.method == "POST":
-        email = request.form["email"]
+        #email = request.form["email"]
+        #email = "Okay"
         password = request.form["password"]
         username = request.form["username"]
         db = get_db()
         error = None
 
-        if not email: # Checking where email and password are empty values. 
-            error = "Email is Required!"
-        elif not password:
+        #if not email: # Checking where email and password are empty values. 
+            #error = "Email is Required!"
+        if not password:
             error = "Password is Required!"
         elif not username:
             error = "Username is Required"
@@ -69,13 +71,13 @@ def register():
             
         if error == None:
             # Check if user already exists
-            if db.execute("SELECT * FROM user WHERE email = ?", (email,)
+            if db.execute("SELECT * FROM user WHERE username = ?", (username,)
                 ).fetchone() != None:
-                error = "Email already registered"
+                error = "Username already registered"
             
             else:
                 try:
-                    db.execute("INSERT INTO user (email,username, password) VALUES (?, ?, ?)", (email, username, generate_password_hash(password)))
+                    db.execute("INSERT INTO user (username, password) VALUES (?, ?)", (username, generate_password_hash(password)))
 
                     db.commit()
                 

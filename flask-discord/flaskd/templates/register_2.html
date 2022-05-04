@@ -3,25 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  
-}
 
-table.center {
-  margin-left: auto; 
-  margin-right: auto;
-  
-}
-/*div {
-  border: 2px solid white;
-  background-color: #6E6D6D;
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-} */
 .flash { margin: 1em 0;
   padding: 1em;
   background: #FFFCFC;
@@ -47,36 +29,43 @@ body {
 </head>
 <body class="bg-dark">
     <div class="container">
-      <div class="row align-items-start text-white">
-        <h1  >   Super Chat Registration  </h1>
+      <div class="row align-items-start text-white gy-5">
+        <h1  class = "border-bottom" >   Super Chat Registration  </h1>
         <div class="col-sm">
-          <p class="text-justify text-primary">
+          <p class="text-justify text-white">
             Please register with your email, password, and unique username. Your username must be less than 33 characters long.
           </p>
+          <form action="/auth/login" method="get">
+            <p> Already Registered? Log in Here</p>
+            <button type="submit" class="btn btn-primary">Log In</button>
+          </form>
+          <div class = "mb-3">
+            <label for="Log In" class="form-label"></label>
+          </div>
         </div>
-        <div class = "col-sm border">
+        <div class = "col-sm">
           <form action="/auth/register" method="post">
-            <div class="mb-3">
+           <!-- <div class="mb-3">
               <label for="Email" class="form-label">Email</label>
               <input type="text" class="form-control" id="Email" name="email">
+            </div> -->
+            <div class="mb-3">
+              <label for="Username" class="form-label">Username</label>
+              <input type="username" class="form-control" id="Username" name="username">
             </div>
             <div class="mb-3">
               <label  for="Password" class="form-label">Password</label>
               <input type="password" class="form-control" id="Password" name="password">
             </div>
-            <div class="mb-3">
-              <label for="Username" class="form-label">Username</label>
-              <input type="password" class="form-control" id="Username" name="username">
-            </div>
             <button type="submit" class="btn btn-primary">Register</button>
-            {% for message in get_flashed_messages() %}
-            <div class="flash">
-              <strong>{{ message }}</strong>
-            </div>
-            {% endfor %}
           </form>
           </div>
         <div class = "col-sm">
+          {% for message in get_flashed_messages() %}
+          <div class="flash">
+            <strong>{{ message }}</strong>
+          </div>
+          {% endfor %}
         </div>
       </div>
     </div>

@@ -1,0 +1,50 @@
+{% extends "auth_template.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<body class="bg-dark">
+  <div class="container">
+    <div class="row align-items-start text-white gy-5">
+      <h1  class = "border-bottom" >   Super Chat Login  </h1>
+      <div class="col-sm">
+        <p class="text-justify text-white">
+          Welcome to Super Chat! <br> A place to chat with strangers...or friends.<br>
+          We have 3 chat channels!!!<br>Please login with your username and password to begin chatting.
+        </p>
+        <form action="/auth/login" method="get">
+          Don't have an account? <br><br> <a href="/auth/register" class="btn btn-primary btn-sm">Register Now</a>
+          <!-- <button type="submit" class="btn btn-primary">Log In</button> -->
+        </form>
+        <div class = "mb-3">
+          <label for="Log In" class="form-label"></label>
+        </div>
+      </div>
+      <div class = "col-sm">
+        <form action="/auth/login" method="post">
+         <!-- <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="Email" name="email">
+          </div> -->
+          <div class="mb-3">
+            <label for="Username" class="form-label">Username</label>
+            <input type="username" class="form-control" id="Username" name="username">
+          </div>
+          <div class="mb-3">
+            <label  for="Password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="Password" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+        </div>
+      <div class = "col-sm">
+        {% for message in get_flashed_messages() %}
+        <div class="flash">
+          <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
