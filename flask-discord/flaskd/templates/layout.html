@@ -105,11 +105,12 @@
       //console.log(previous_message);
       //console.log(previous_message[0])
       console.log(name);
-      const previous_user = previous_message_array[0];
+      const previouslyFrom = previous_message_array[0];
       const previous_time = new Date(previous_message_array[1] + "UTC");
       console.log(time - previous_time > 300*100);
       console.log(time - previous_time);
       //}
+      const fromUser = json["username"];
       
       var userMessage = document.createElement('p');
       var lastObject = messages.lastChild;
@@ -117,7 +118,14 @@
       console.log(messages.lastElementChild);
       userMessage.textContent = json["message"];
       //(name != json["username"] || lastMessageTime - time > (300*1000)) { //5min 3000000milliseconds 
-      if (previous_user != name || time - previous_time > 300*1000 || lastObject.className === "join_message" ) {
+      
+      if ((previouslyFrom === fromUser  && time - previous_time < 300*1000 ) && lastObject.className != "join_message") {
+        lastObject.appendChild(userMessage)
+        //last.textContent = json["message"];
+        //item.textContent =  json["message"];
+
+      }
+      else {
         var item = document.createElement('li');
         //var item = document.createElement('li');
         var test = document.createElement('span');
@@ -128,12 +136,6 @@
         item.appendChild(test);
         item.appendChild(userMessage);
         messages.appendChild(item);
-      }
-      else {
-        lastObject.appendChild(userMessage)
-        //last.textContent = json["message"];
-        //item.textContent =  json["message"];
-
       }
       console.log(time.toLocaleTimeString());
 			

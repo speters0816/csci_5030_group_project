@@ -56,6 +56,7 @@ def register():
         #email = request.form["email"]
         #email = "Okay"
         password = request.form["password"]
+        confirm = request.form["confirm"]
         username = request.form["username"]
         db = get_db()
         error = None
@@ -68,7 +69,8 @@ def register():
             error = "Username is Required"
         elif len(username) > 32:
             error = "Error! Username too long. Please make it less than 32 characters long"
-            
+        elif confirm != password:
+            error = "Passwords do not match!"
         if error == None:
             # Check if user already exists
             if db.execute("SELECT * FROM user WHERE username = ?", (username,)
