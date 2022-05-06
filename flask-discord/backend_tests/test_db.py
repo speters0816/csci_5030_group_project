@@ -46,16 +46,24 @@ def test_duplicate_insert(app):
         assert db.execute("SELECT * FROM user WHERE email = ?", (email,)
                 ).fetchone()
 
-
-def test_overlength_username(app):
+def test_username_select(app):
     with app.app_context():
         db = get_db()
-        email = "sam@yahoo.com"
-        username = "CoolSammmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
-        db.execute("INSERT INTO user (email,username, password) VALUES (?, ?, ?)", (email, username, generate_password_hash("test"))
+        email = "test@gmail.com"
+        username = "CoolTom"
+        db.execute("INSERT INTO user (email,username,password) VALUES (?, ?, ?)", (email, username, generate_password_hash("test"))
                 )
         db.commit()
-        user = db.execute("SELECT * FROM user WHERE email = ?", (email,)
+        
+        assert db.execute("SELECT * FROM user WHERE email = ?", (email,)
                 ).fetchone()
 
-        assert user[1] == email
+
+def test_username_insert(app):
+    with app.app_context():
+        db = get_db()
+        #email = "test@gmail.com"
+        username = "Sam16711"
+        user = db.execute("SELECT * FROM user WHERE username = ?", (username,)
+                ).fetchone()
+        assert len(user) != 0

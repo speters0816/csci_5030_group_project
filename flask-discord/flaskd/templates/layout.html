@@ -47,9 +47,6 @@
       for (let i = 0; i < messages.length; i++) {
         const item = document.createElement('li');
         const timeSpan = document.createElement('span');
-        //const usrMessage = document.createElement('p');
-        //const header = messages[i].split("|")[0];
-        //const content = messages[i];
         const msgArray = messages[i];
         item.textContent = msgArray[0];
         console.log(msgArray[0]);
@@ -57,10 +54,22 @@
         console.log(msgArray[2]);
         //item.setAttribute('style', 'line-height: 0');
 
-        const time = new Date( msgArray[1] + "UTC");
-        timeSpan.textContent = "     " + time.toLocaleTimeString();
+        let time = new Date( msgArray[1] + "UTC");
+        const current_time = new Date(Date.now());
+
+        if (time.toDateString() != current_time.toDateString() ) {
+          time = time.toDateString();
+        }
+        else {
+          time = time.toLocaleTimeString();
+        }
+
+        //timeSpan.textContent = "     " + time.toLocaleTimeString();
+        timeSpan.textContent = "     " + time;
         //timeSpan.setAttribute('style', 'font-size: 12px;');
         item.appendChild(timeSpan);
+       
+        // Loop through appended messages for that time
         for (let i = 0; i < msgArray[2].length; i++) {
           let usrMessage = document.createElement('p');
           usrMessage.textContent = msgArray[2][i];

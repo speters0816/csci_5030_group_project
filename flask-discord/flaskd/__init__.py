@@ -144,6 +144,7 @@ def create_app(test_config=None):
         data["message"] = username + " has joined " + room + " chat"
         data["message_history"] = message_history[room]
         
+        print(data["message_history"])
         print("current Users: ",current_users)
         join_room(room)
         emit("chat join",data,json=True,to=room)
@@ -176,12 +177,10 @@ def create_app(test_config=None):
             print("working!")
             message_history[room][lenRoomHistory-1][-1].append(new_message)
         else:
-        #message = data["username"] + " " + data["timestamp"] + " " + data["message"] # This doesn't actually change the original user message. Updates it for history
             message = [data["username"],data["timestamp"],[data["message"]] ] # This doesn't actually change the original user message. Updates it for history
             message_history[room].append(message)
 
         save_history(message_history,outFile)
-        #print("message history: ",message_history)
         emit("chat message",data,json=True,to=room)
 
     @socketio.on("leave")

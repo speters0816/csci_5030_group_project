@@ -39,9 +39,15 @@
         </div>
       <div class = "col-sm">
         {% for message in get_flashed_messages() %}
-        <div class="flash">
-          <strong>{{ message }}</strong>
-        </div>
+          {% if "success" in message %}
+            <div class="flash" style="color: blue;">
+              <strong>{{ message }}</strong>
+            </div>
+          {% else %}
+            <div class="flash">
+              <strong>{{ message }}</strong>
+            </div>
+          {% endif %}
         {% endfor %}
       </div>
     </div>

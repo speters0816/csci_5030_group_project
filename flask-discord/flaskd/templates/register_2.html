@@ -32,16 +32,6 @@ body {
       <div class="row align-items-start text-white gy-5">
         <h1  class = "border-bottom" >   Super Chat Registration  </h1>
         <div class="col-sm">
-          <p class="text-justify text-white">
-            Please register with your email, password, and unique username. Your username must be less than 33 characters long.
-          </p>
-          <form action="/auth/login" method="get">
-            <p> Already Registered? Log in Here</p>
-            <button type="submit" class="btn btn-primary">Log In</button>
-          </form>
-          <div class = "mb-3">
-            <label for="Log In" class="form-label"></label>
-          </div>
         </div>
         <div class = "col-sm">
           <form action="/auth/register" method="post">
@@ -59,14 +49,35 @@ body {
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
           </form>
+        
+          <!-- 
+          <form action="/auth/login" method="get">
+            <p> Already Registered? Log in Here</p>
+            <button type="submit" class="btn btn-primary">Log In</button>
+          </form>
+          <div class = "mb-3">
+            <label for="Log In" class="form-label"></label>
           </div>
+           -->
+        </div>
         <div class = "col-sm">
           {% for message in get_flashed_messages() %}
           <div class="flash">
-            <strong>{{ message }}</strong>
+            <p><strong>{{ message }}</strong></p>
           </div>
           {% endfor %}
         </div>
+      </div>
+        <div class="row align-items-end text-white gy-5">
+          <div class="col-sm"></div>
+          <div class="col-sm">
+            <br>
+            <form class="border-top" action="/auth/login" method="get">
+              <p class="text-center border-bottom">OR</p>
+                <button type="submit" class="btn btn-primary">Log In</button>
+              </form>
+          </div>
+          <div class="col-sm"></div>
       </div>
     </div>
   </body>
