@@ -13,11 +13,11 @@ bp = Blueprint('auth',__name__,url_prefix='/auth')
 @bp.route("/settings",methods=("GET","POST"))
 def change_username():
     if request.method == "POST":
-        new_username=request.form["uname"]
-        email=request.form['email']
+        new_username=request.form["username"]
+        password = request.form[password]
         # print(new_username)
         db = get_db()
-        db.execute("UPDATE user SET username =? WHERE email=?",(new_username,email))
+        db.execute("UPDATE user SET username =? WHERE password=?",(new_username,generate_password_hash(password)))
         db.commit()
         return redirect(url_for("index", room_id="Home"))
     

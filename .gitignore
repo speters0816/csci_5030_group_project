@@ -16,3 +16,6 @@ build/
 int_devenv.sh
 setup.cfg
 node_modules/
+gunicorn_command.txt
+package-lock.json
+package.json

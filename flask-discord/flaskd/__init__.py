@@ -116,6 +116,9 @@ def create_app(test_config=None):
         message_history = load_history(outFile)
         print("loaded chat history from pickle!")
         print(type(message_history))
+    elif os.path.isdir(os.path.split(outFile)[0]) == False:
+        os.mkdir(os.path.split(outFile)[0])
+        message_history = {}
     else:
         message_history = {}
 
