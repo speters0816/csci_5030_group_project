@@ -144,7 +144,7 @@ def create_app(test_config=None):
         data["message"] = username + " has joined " + room + " chat"
         data["message_history"] = message_history[room]
         
-        print(data["message_history"])
+        #print(data["message_history"])
         print("current Users: ",current_users)
         join_room(room)
         emit("chat join",data,json=True,to=room)

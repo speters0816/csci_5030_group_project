@@ -206,7 +206,146 @@
       logoutBtn.onclick = emitLeave;
       
 
+      function displayMenu(messages,message_history) {
+        //console.log(myBtn);
+        const displayNameBtn = document.getElementById("displayname");
+        let messagesli = document.getElementById("messages");
+        let container = document.getElementById("master");
 
+        let settings = document.createElement('div');
+        let settingsLi = document.createElement('li');
+        let settings_body = document.createElement('div');
+
+        let closeBtn = document.createElement('button');
+        closeBtn.setAttribute("id","closeBtn");
+        closeBtn.innerHTML="X";
+        closeBtn.className = "closeBtn";
+        
+
+        let form = document.createElement('form');
+        let btn = document.createElement('button');
+        let heading = document.createElement('div');
+
+        let input1 = document.createElement('input');
+        let label1 = document.createElement('label');
+        let label2 = document.createElement('label');
+        let input2 = document.createElement('input');
+        let heading_text = document.createElement('h1');
+        let changeUsername = document.createElement('button');
+
+        changeUsername.innerHTML = "Change Username";
+
+        settings.setAttribute("id","settings");
+        //heading.textContent = "Settings";
+        heading.setAttribute("id","settings_header")
+        heading_text.textContent = "Settings";
+        //headingLeft.appendChild(heading_text);
+
+        //headingRight.setAttribute("id","right_header");
+        heading.appendChild(heading_text);
+        settings_body.setAttribute("id","settings_body");
+        label1.setAttribute("for","username");
+        label1.className = "form-label";
+        label1.textContent="Username";
+        label1.setAttribute("for","username");
+        input1.setAttribute("id","username");
+
+        label2.setAttribute("for","password");
+        label2.className = "form-label";
+        label2.textContent="Password";
+        input2.setAttribute("for","password");
+        input2.setAttribute("id","password");
+        input2.setAttribute("type","password");
+
+        form.setAttribute("method","post");
+        //form.setAtribute("label")
+        btn.innerHTML="Submit";
+        btn.type="Submit";
+        changeUsername.setAttribute("id","changeUsernameButton");
+        form.append(label1);
+        form.append(input1);
+        form.append(label2);
+        form.append(input2);
+        form.append(btn);
+
+        //settingsLi.textContent = "Change Username";
+        //settings.textContent="form";
+        heading.appendChild(changeUsername);
+        settings.appendChild(heading);
+        settings.appendChild(closeBtn);
+        container.appendChild(settings);
+
+        //const closeButton = document.getElementById("closeBtn");
+        //console.log(closeButton);
+        closeBtn.onclick = closeSettings;
+
+      const changeUsernameButton = document.getElementById("changeUsernameButton");
+      changeUsernameButton.onclick = displayUsernameChange;
+      console.log(changeUsernameButton);
+      }
+     function closeSettings() {
+        settings.parentNode.removeChild(settings);
+      }
+
+      const displayNameBtn = document.getElementById("displayname");
+      displayNameBtn.onclick = displayMenu;
+      console.log(displayNameBtn);
+    
+      function displayUsernameChange() {
+        let container = document.getElementById("master");
+        let form = document.createElement('form');
+        let btn = document.createElement('button');
+        let window = document.createElement('div');
+
+
+        window.setAttribute("id","usernameChangeWindow");
+        let input1 = document.createElement('input');
+        let label1 = document.createElement('label');
+        let label2 = document.createElement('label');
+        let input2 = document.createElement('input');
+        let closeBtn = document.createElement('button');
+        label1.setAttribute("for","username");
+        label1.className = "form-label";
+        label1.textContent="Username";
+        label1.setAttribute("for","username");
+        input1.setAttribute("id","username");
+
+        label2.setAttribute("for","password");
+        label2.className = "form-label";
+        label2.textContent="Password";
+        input2.setAttribute("for","password");
+        input2.setAttribute("id","password");
+        input2.setAttribute("type","password");
+
+        closeBtn.setAttribute("id","innerCloseBtn");
+        closeBtn.className = "closeBtn";
+        closeBtn.innerHTML="X";
+
+        btn.innerHTML="Submit";
+        btn.type="Submit";
+
+        form.append(label1);
+        form.append(input1);
+        form.append(label2);
+        form.append(input2);
+        form.append(btn);
+        
+        window.append(closeBtn);
+        window.append(form);
+
+        container.appendChild(window);
+
+        const closeButton = document.getElementById("innerCloseBtn");
+        console.log(closeButton);
+        closeButton.onclick = closeWindow;
+
+
+      }
+
+      function closeWindow() {
+        usernameChangeWindow.parentNode.removeChild(usernameChangeWindow);
+
+      }
   });
 
 </script>
@@ -214,7 +353,7 @@
 </head>
 <body> 
 
-  <div class="wrapper">
+  <div id = "master" class="wrapper">
     <div class="leftpane_sub1">
       <form action="/Random" method="get">
         <button id="lpbut">Random</button>
@@ -256,7 +395,7 @@
     </div>
     -->
 
-    <div class="chatbox">
+    <div id="chatbox" class="chatbox">
       <ul id="messages"></ul>
     </div>
 
