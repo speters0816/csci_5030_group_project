@@ -1,4 +1,4 @@
-# Money Hunters
+# Lone Wolf
 ## Development team that brings product solutions to the market. 
 
 **Our customer**: Companies or groups looking to enhance their profit margins using software solutions that increase productivity, enhance marketing strategies, or improve information organization.
@@ -7,7 +7,7 @@
 
 **Current product solution**: Discord-esque web application: [link](https://github.com/thegoldenmule/csci-5030/blob/main/notes/briefs/discord.md)
 
-**Trello**: [link](https://trello.com/b/uMw7mjYG/project-management)
+**Trello**: [link](https://trello.com/b/ua6t1xGO/cscidiscordprojectsam)
 
 ## Tests
 
